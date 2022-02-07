@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EmployeeService from '../services/EmployeeService';
 
 const EmployeeList = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [employees, setEmployees] = useState(null);
+
+ 
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const response = await EmployeeService.getEmployees();
+        setEmployees(response.data);
+        console.log(employees)
+      } catch (error) {
+        console.log(error);
+      }
+      setLoading(false);
+    };
+    getData();
+  }, []);
+
+ 
+ 
+ 
   return (
   <div className="container mx-auto my-6">
       <div className="h-12">
@@ -19,12 +43,17 @@ const EmployeeList = () => {
             </tr>
           </thead>
           <tbody className="bg-white">
-            <tr>
-              <td className="text-left px-6 py-4 whitespace-nowrap"><div className="test-sm text-gray-500">William</div></td>
-              <td className="text-left px-6 py-4 whitespace-nowrap"><div className="test-sm text-gray-500">Chandler</div></td>
-              <td className="text-left px-6 py-4 whitespace-nowrap"><div className="test-sm text-gray-500">vastyle2010@gmail.com</div></td>
-              <td className="text-right px-6 py-4 whitespace-nowrap text-sm font-medium"> <a href="#" className="text-indigo-600 hover:text-indigo-800 px-4">Edit</a> <a href="#" className="text-indigo-600 hover:text-indigo-800">Delete</a></td>
-            </tr>
+            {!loading && (employees.map((employee) => {
+              return(
+              <tr>
+                <td className="text-left px-6 py-4 whitespace-nowrap"><div className="test-sm text-gray-500">{employee.firstName}</div></td>
+                <td className="text-left px-6 py-4 whitespace-nowrap"><div className="test-sm text-gray-500">{employee.lastName}</div></td>
+                <td className="text-left px-6 py-4 whitespace-nowrap"><div className="test-sm text-gray-500">{employee.emailId}</div></td>
+                <td className="text-right px-6 py-4 whitespace-nowrap text-sm font-medium"> <a href="#" className="text-indigo-600 hover:text-indigo-800 px-4">Edit</a> <a href="#" className="text-indigo-600 hover:text-indigo-800">Delete</a></td>
+              </tr>
+              )
+            }))
+            }
           </tbody>
         </table>
       </div>
