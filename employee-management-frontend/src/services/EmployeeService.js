@@ -10,7 +10,11 @@ class EmployeeService {
 
     getEmployees() {
         return axios.get(EMPLOYEE_API_SPRINGBOOT_URL);
-      }
+    }
+
+    deleteEmployee(id){
+        return axios.delete(`${EMPLOYEE_API_SPRINGBOOT_URL}/${id}`)
+    }
 }
 
 export default new EmployeeService();
